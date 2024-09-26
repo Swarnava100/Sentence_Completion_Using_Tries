@@ -11,9 +11,7 @@ struct TrieNode {
     unordered_map<string, TrieNode*> children;
     bool isEndOfWord;
 
-    TrieNode() {
-        isEndOfWord = false;
-    }
+    TrieNode() : isEndOfWord(false) {}
 };
 
 // Trie class
@@ -39,21 +37,35 @@ public:
         node->isEndOfWord = true;
     }
 
+    // Function to search for a word in the Trie
+    TrieNode* search(const string& word) {
+        TrieNode* node = root;
+        vector<string> words = splitSentence(word);
+
+        for (const string& w : words) {
+            if (node->children.find(w) == node->children.end()) {
+                return nullptr; // Word not found
+            }
+            node = node->children[w];
+        }
+        return node; // Return the node where the word ends
+    }
+
     // Level-order (BFS) print function for the Trie
-    void printTrieLevelOrder() {
-        if (!root) return;
+    void printTrieLevelOrder(TrieNode* node, const string& prefix) {
+        if (!node) return;
 
         queue<pair<TrieNode*, string>> q;
-        q.push({root, ""});
+        q.push({node, prefix});
 
         while (!q.empty()) {
             auto current = q.front();
-            TrieNode* node = current.first;
-            string prefix = current.second;
+            TrieNode* currNode = current.first;
+            string currentPrefix = current.second;
             q.pop();
 
-            for (const auto& child : node->children) {
-                string word = prefix + (prefix.empty() ? "" : " ") + child.first;
+            for (const auto& child : currNode->children) {
+                string word = currentPrefix + (currentPrefix.empty() ? "" : " ") + child.first;
                 cout << word << endl;
                 q.push({child.second, word});
             }
@@ -76,13 +88,25 @@ private:
 
 int main() {
     Trie trie;
-    trie.insert("this is a test");
-    trie.insert("this is another test");
-    trie.insert("trie stores words");
+    trie.insert("my name is tanisha");
+    trie.insert("my name is mahi");
+    trie.insert("my pet is a cat");
+    trie.insert("my pet is nice");
+    trie.insert("cats are fun");
+    trie.insert("cats and dogs are animals");
+    trie.insert("this is a trial test");
 
-    cout << "Printing Trie structure (Level Order):" << endl;
-    trie.printTrieLevelOrder();
+    string inputWord;
+    cout << "Enter a word to search for its subtree: ";
+    getline(cin, inputWord);
+
+    TrieNode* searchNode = trie.search(inputWord);
+    if (searchNode) {
+        cout << "Subtree for the word '" << inputWord << "':" << endl;
+        trie.printTrieLevelOrder(searchNode, inputWord);
+    } else {
+        cout << "Word '" << inputWord << "' not found in the Trie." << endl;
+    }
 
     return 0;
 }
-
