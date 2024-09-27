@@ -88,13 +88,23 @@ private:
 
 int main() {
     Trie trie;
-    trie.insert("my name is tanisha");
+    string input;
+
+    cout << "Enter strings to insert into the trie (type 'exit' to finish):" << std::endl;
+    while (true) {
+        getline(cin, input);
+        if (input == "exit") {
+            break;
+        }
+        trie.insert(input);
+    }
+    /*trie.insert("my name is tanisha");
     trie.insert("my name is mahi");
     trie.insert("my pet is a cat");
     trie.insert("my pet is nice");
     trie.insert("cats are fun");
     trie.insert("cats and dogs are animals");
-    trie.insert("this is a trial test");
+    trie.insert("this is a trial test");*/
 
     string inputWord;
     cout << "Enter a word to search for its subtree: ";
@@ -105,7 +115,7 @@ int main() {
         cout << "Subtree for the word '" << inputWord << "':" << endl;
         trie.printTrieLevelOrder(searchNode, inputWord);
     } else {
-        cout << "Word '" << inputWord << "' not found in the Trie." << endl;
+        cout << "Word '" << inputWord << "' not found" << endl;
     }
 
     return 0;
