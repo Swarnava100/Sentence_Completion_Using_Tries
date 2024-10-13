@@ -78,5 +78,16 @@ document.getElementById('prefixInput').addEventListener('input', () => {
     }
 
     const results = trie.autocomplete(prefix);
-    resultsDiv.innerHTML = results.length ? results.map(res => `<div>${res}</div>`).join('') : '<div>No suggestions found.</div>';
+    resultsDiv.innerHTML = results.length
+        ? results.map(res => `<div class="suggestion">${res}</div>`).join('')
+        : '<div>No suggestions found.</div>';
+
+    // Add click event listeners to suggestion elements
+    const suggestions = resultsDiv.querySelectorAll('.suggestion');
+    suggestions.forEach(suggestion => {
+        suggestion.addEventListener('click', () => {
+            document.getElementById('prefixInput').value = suggestion.textContent; // Populate the input with the clicked suggestion
+            resultsDiv.innerHTML = ''; // Clear suggestions after selection
+        });
+    });
 });

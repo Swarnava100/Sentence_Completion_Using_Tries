@@ -95,8 +95,15 @@ body {
     border-bottom: 1px solid #00bcd4;
     color: #00e5ff; /* Cyan color for list items */
     font-size: 1.1rem;
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
 }
 
 .results div:last-child {
     border-bottom: none; /* Remove border for last item */
+}
+
+/* Hover Effect for Suggestions */
+.results div:hover {
+    background-color: rgba(0, 180, 210, 0.5); /* Light cyan background on hover */
+    cursor: pointer; /* Pointer cursor on hover */
 }
