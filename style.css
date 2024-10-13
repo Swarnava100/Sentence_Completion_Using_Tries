@@ -80,30 +80,6 @@ body {
     color: #8fa9b3;
 }
 
-/* Button styling */
-.btn-dark {
-    background: linear-gradient(135deg, #00796b, #004d40); /* Gradient button for depth */
-    border: none;
-    padding: 15px;
-    font-size: 1.3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.btn-dark i {
-    margin-right: 10px;
-}
-
-.btn-dark:hover {
-    background: linear-gradient(135deg, #00e676, #00796b); /* Lighter greenish hover effect */
-    transform: translateY(-5px);
-}
-
 /* Results */
 .results {
     color: #f1f8ff;
@@ -114,19 +90,13 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.results ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.results li {
+.results div {
     padding: 10px 0;
     border-bottom: 1px solid #00bcd4;
     color: #00e5ff; /* Cyan color for list items */
     font-size: 1.1rem;
 }
 
-.results li:last-child {
-    border-bottom: none;
+.results div:last-child {
+    border-bottom: none; /* Remove border for last item */
 }

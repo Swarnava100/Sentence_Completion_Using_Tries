@@ -14,7 +14,7 @@ class Trie {
     insert(sentence) {
         let node = this.root;
         for (const char of sentence) {
-            if (char === ' ') continue;
+            if (char === ' ') continue; // Ignore spaces
             if (!node.children[char]) {
                 node.children[char] = new TrieNode();
             }
@@ -27,7 +27,7 @@ class Trie {
     autocomplete(prefix) {
         let node = this.root;
         for (const char of prefix) {
-            if (char === ' ') continue;
+            if (char === ' ') continue; // Ignore spaces
             if (!node.children[char]) {
                 return []; // No suggestions
             }
@@ -50,6 +50,7 @@ class Trie {
 
 let trie = new Trie();
 
+// Event listener for file input
 document.getElementById('fileInput').addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -57,16 +58,25 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
         reader.onload = function(e) {
             const lines = e.target.result.split('\n');
             lines.forEach(line => {
-                trie.insert(line.trim());
+                if (line.trim()) { // Only insert non-empty lines
+                    trie.insert(line.trim());
+                }
             });
         };
         reader.readAsText(file);
     }
 });
 
-document.getElementById('searchButton').addEventListener('click', () => {
+// Event listener for input change to provide instant suggestions
+document.getElementById('prefixInput').addEventListener('input', () => {
     const prefix = document.getElementById('prefixInput').value;
-    const results = trie.autocomplete(prefix);
     const resultsDiv = document.getElementById('results');
+
+    if (prefix === '') {
+        resultsDiv.innerHTML = ''; // Clear results if no input
+        return;
+    }
+
+    const results = trie.autocomplete(prefix);
     resultsDiv.innerHTML = results.length ? results.map(res => `<div>${res}</div>`).join('') : '<div>No suggestions found.</div>';
 });
