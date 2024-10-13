@@ -1,7 +1,10 @@
-in computer science a data structure is a data organization and storage format that is usually 
-it is an algebraic structure about data.
-in it hello hwyh sdbjhzdf shhj
-iin jhvdg hjgdsyxg ndbxjhgb 
-chosen for efficient access to data
-more precisely a data structure is a collection of data values
-the relationships among them and the functions or operations that can be applied to the data
+Although the weather was bad, we decided to go hiking.
+Although she was tired, she stayed up late to finish the project.
+Despite the challenges, he remained optimistic and kept moving forward.
+Despite her busy schedule, she always makes time for her family.
+Since we arrived early, we got the best seats in the theater.
+Since you’ve completed your task, you can take a short break.
+If you work hard, success will eventually come.
+If it rains tomorrow, we will reschedule the picnic.
+Because they worked together, the project was finished on time.
+Because of the delay, we missed the first part of the meeting.
