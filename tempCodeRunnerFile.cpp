@@ -2,16 +2,13 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <memory>
 
 using namespace std;
 
-// Trie Node Structure
 class TrieNode {
 public:
     TrieNode* children[26]; // Array for 26 lowercase letters
-    bool isEndOfWord; // Indicates if a word ends at this node
-    string fullSentence; // Store the complete sentence for this node
+    bool isEndOfWord;
 
     TrieNode() {
         isEndOfWord = false;
@@ -21,25 +18,12 @@ public:
     }
 };
 
-// Trie Class
 class Trie {
 private:
     TrieNode* root;
 
     int charToIndex(char c) {
         return c - 'a'; // Convert character to array index (assuming lowercase letters)
-    }
-
-    // Recursive function to find words starting with a given prefix
-    void findWords(TrieNode* node, const string& prefix, vector<string>& suggestions) {
-        if (node->isEndOfWord) {
-            suggestions.push_back(node->fullSentence); // Add the full sentence to suggestions
-        }
-        for (int i = 0; i < 26; ++i) {
-            if (node->children[i] != nullptr) {
-                findWords(node->children[i], prefix, suggestions);
-            }
-        }
     }
 
 public:
@@ -59,36 +43,49 @@ public:
             node = node->children[index];
         }
         node->isEndOfWord = true; // Mark the end of a word
-        node->fullSentence = sentence; // Store the complete sentence at this node
     }
 
-    // Autocomplete function to suggest words based on a prefix
+    // Recursive function to find words
+    void findWords(TrieNode* node, const string& prefix, vector<string>& suggestions, const string& originalPrefix) {
+        if (node->isEndOfWord) {
+            suggestions.push_back(originalPrefix); // Use the original prefix to maintain correct format
+        }
+        for (int i = 0; i < 26; ++i) {
+            if (node->children[i] != nullptr) {
+                findWords(node->children[i], prefix + char(i + 'a'), suggestions, originalPrefix + char(i + 'a'));
+            }
+        }
+    }
+
     vector<string> autocomplete(const string& prefix) {
         TrieNode* node = root;
         vector<string> suggestions;
+        string cleanedPrefix;
 
-        // Traverse the Trie based on the prefix
+        // Clean the prefix to ignore spaces
         for (char c : prefix) {
-            if (c == ' ') continue; // Ignore spaces
+            if (c != ' ') {
+                cleanedPrefix += c;
+            }
+        }
+
+        for (char c : cleanedPrefix) {
             int index = charToIndex(c);
             if (node->children[index] == nullptr) {
-                return suggestions; // No suggestions if the path does not exist
+                return suggestions; // No suggestions
             }
             node = node->children[index];
         }
-
-        // Find all words that start with the given prefix
-        findWords(node, prefix, suggestions);
+        findWords(node, "", suggestions, cleanedPrefix); // Start with the cleaned prefix
         return suggestions;
     }
 };
 
-// Main function
 int main() {
     Trie trie; // Instantiate the Trie
 
     // Read sentences from a file
-    ifstream file("wikipedia.txt");
+    ifstream file("sentences.txt");
     if (!file.is_open()) {
         cerr << "Could not open the file!" << endl;
         return 1;
@@ -116,7 +113,7 @@ int main() {
             cout << " - No suggestions found.\n";
         } else {
             for (const string& suggestion : results) {
-                cout << " - " << suggestion << "\n"; // Display each suggestion
+                cout << " - " << suggestion << "\n";
             }
         }
     }
