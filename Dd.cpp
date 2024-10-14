@@ -1,122 +1,130 @@
 #include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
-#include <memory>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>  
 
-using namespace std;
+struct TrieNode {
+    std::unordered_map<char, TrieNode*> children;
+    std::vector<std::string> sentences;  
+    bool isEndOfWord;  
 
-// Trie Node Structure
-class TrieNode {
-public:
-    TrieNode* children[26]; // Array for 26 lowercase letters
-    bool isEndOfWord; // Indicates if a word ends at this node
-    string fullSentence; // Store the complete sentence for this node
-
-    TrieNode() {
-        isEndOfWord = false;
-        for (int i = 0; i < 26; ++i) {
-            children[i] = nullptr; // Initialize all children to nullptr
-        }
-    }
+    TrieNode() : isEndOfWord(false) {}
 };
 
-// Trie Class
 class Trie {
 private:
     TrieNode* root;
-
-    int charToIndex(char c) {
-        return c - 'a'; // Convert character to array index (assuming lowercase letters)
-    }
-
-    // Recursive function to find words starting with a given prefix
-    void findWords(TrieNode* node, const string& prefix, vector<string>& suggestions) {
-        if (node->isEndOfWord) {
-            suggestions.push_back(node->fullSentence); // Add the full sentence to suggestions
-        }
-        for (int i = 0; i < 26; ++i) {
-            if (node->children[i] != nullptr) {
-                findWords(node->children[i], prefix, suggestions);
-            }
-        }
-    }
 
 public:
     Trie() {
         root = new TrieNode();
     }
 
-    // Insert a sentence into the trie
-    void insert(const string& sentence) {
-        TrieNode* node = root;
-        for (char c : sentence) {
-            if (c == ' ') continue; // Ignore spaces for indexing
-            int index = charToIndex(c);
-            if (node->children[index] == nullptr) {
-                node->children[index] = new TrieNode();
-            }
-            node = node->children[index];
-        }
-        node->isEndOfWord = true; // Mark the end of a word
-        node->fullSentence = sentence; // Store the complete sentence at this node
+    ~Trie() {
+        deleteNode(root);
     }
 
-    // Autocomplete function to suggest words based on a prefix
-    vector<string> autocomplete(const string& prefix) {
+    // Insert a sentence into the Trie
+    void insert(const std::string& sentence) {
         TrieNode* node = root;
-        vector<string> suggestions;
-
-        // Traverse the Trie based on the prefix
-        for (char c : prefix) {
-            if (c == ' ') continue; // Ignore spaces
-            int index = charToIndex(c);
-            if (node->children[index] == nullptr) {
-                return suggestions; // No suggestions if the path does not exist
+        for (char ch : sentence) {
+            if (!node->children.count(ch)) {
+                node->children[ch] = new TrieNode();
             }
-            node = node->children[index];
+            node = node->children[ch];
+        }
+        node->isEndOfWord = true;
+        node->sentences.push_back(sentence);  
+    }
+
+    std::vector<std::string> search(const std::string& prefix) {
+        TrieNode* node = root;
+        for (char ch : prefix) {
+            if (!node->children.count(ch)) {
+                return {};  // If prefix is not found, return empty
+            }
+            node = node->children[ch];
+        }
+        // At the node corresponding to the last character of prefix, return stored sentences
+        return collectSentences(node);
+    }
+
+private:
+    std::vector<std::string> collectSentences(TrieNode* node) {
+        std::vector<std::string> result;
+
+        if (node->isEndOfWord) {
+            result.insert(result.end(), node->sentences.begin(), node->sentences.end());
         }
 
-        // Find all words that start with the given prefix
-        findWords(node, prefix, suggestions);
-        return suggestions;
+        for (auto& [key, child] : node->children) {
+            std::vector<std::string> childSentences = collectSentences(child);
+            result.insert(result.end(), childSentences.begin(), childSentences.end());
+        }
+
+        return result;
+    }
+
+    void deleteNode(TrieNode* node) {
+        for (auto& [key, child] : node->children) {
+            deleteNode(child);
+        }
+        delete node;
     }
 };
 
-// Main function
-int main() {
-    Trie trie; // Instantiate the Trie
+std::string toLower(const std::string& str) {
+    std::string result = str;
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
+}
 
-    // Read sentences from a file
-    ifstream file("wikipedia.txt");
-    if (!file.is_open()) {
-        cerr << "Could not open the file!" << endl;
-        return 1;
+std::vector<std::string> loadFile(const std::string& filename) {
+    std::vector<std::string> sentences;
+    std::ifstream file(filename);
+
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return sentences;
     }
 
-    string line;
+    std::string line;
     while (getline(file, line)) {
-        trie.insert(line); // Use the trie object to insert sentences
-    }
-    file.close();
-
-    // Search for prefixes and get completions
-    string input;
-    while (true) {
-        cout << "\nEnter a prefix to autocomplete (or type 'exit' to quit): ";
-        getline(cin, input);
-
-        if (input == "exit") {
-            break; // Exit the loop if the user types 'exit'
+        if (!line.empty()) {  // Ensure that empty lines are ignored
+            sentences.push_back(toLower(line));  // Store sentences in lowercase
         }
+    }
 
-        auto results = trie.autocomplete(input);
-        cout << "Autocomplete suggestions for '" << input << "':\n";
+    file.close();
+    return sentences;
+}
+
+int main() {
+    Trie trie;
+
+    std::vector<std::string> sentences = loadFile("wikipedia.txt");
+    for (const std::string& sentence : sentences) {
+        trie.insert(sentence);
+    }
+
+    std::string input;
+    std::cout << "Enter a word or prefix: ";
+    std::getline(std::cin, input);
+
+    input = toLower(input);
+
+    if (input.length() < 2) {
+        std::cout << "Please enter at least 2 characters for the prefix." << std::endl;
+    } else {
+        std::vector<std::string> results = trie.search(input);
         if (results.empty()) {
-            cout << " - No suggestions found.\n";
+            std::cout << "No matching sentences found." << std::endl;
         } else {
-            for (const string& suggestion : results) {
-                cout << " - " << suggestion << "\n"; // Display each suggestion
+            std::cout << "Matching sentences:\n";
+            for (const auto& sentence : results) {
+                std::cout << sentence << std::endl;
             }
         }
     }
