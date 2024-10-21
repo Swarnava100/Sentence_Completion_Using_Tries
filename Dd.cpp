@@ -26,7 +26,6 @@ public:
         deleteNode(root);
     }
 
-    // Insert a sentence into the Trie
     void insert(const std::string& sentence) {
         TrieNode* node = root;
         for (char ch : sentence) {

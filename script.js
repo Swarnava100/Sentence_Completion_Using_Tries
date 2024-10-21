@@ -33,7 +33,7 @@ class Trie {
             }
             node = node.children[char];
         }
-        return this.findWords(node);
+        return this.findWords(node).slice(0, 5); // Return first 5 suggestions
     }
 
     findWords(node) {
@@ -50,16 +50,21 @@ class Trie {
 
 let trie = new Trie();
 
+// Function to split text based on various punctuation marks and line breaks
+function splitText(text) {
+    return text.match(/[^.!?]*[.!?]/g) || [];
+}
+
 // Event listener for file input
 document.getElementById('fileInput').addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            const lines = e.target.result.split('\n');
-            lines.forEach(line => {
-                if (line.trim()) { // Only insert non-empty lines
-                    trie.insert(line.trim());
+        reader.onload = function (e) {
+            const sentences = splitText(e.target.result); // Split text into sentences
+            sentences.forEach(sentence => {
+                if (sentence.trim()) {
+                    trie.insert(sentence.trim());
                 }
             });
         };
@@ -67,27 +72,31 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
     }
 });
 
-// Event listener for input change to provide instant suggestions
+// Event listener for input change with time buffer for search
+let timeoutId;
 document.getElementById('prefixInput').addEventListener('input', () => {
-    const prefix = document.getElementById('prefixInput').value;
-    const resultsDiv = document.getElementById('results');
+    clearTimeout(timeoutId); // Clear previous timeout to prevent multiple triggers
+    timeoutId = setTimeout(() => {
+        const prefix = document.getElementById('prefixInput').value;
+        const resultsDiv = document.getElementById('results');
 
-    if (prefix === '') {
-        resultsDiv.innerHTML = ''; // Clear results if no input
-        return;
-    }
+        if (prefix === '') {
+            resultsDiv.innerHTML = ''; // Clear results if no input
+            return;
+        }
 
-    const results = trie.autocomplete(prefix);
-    resultsDiv.innerHTML = results.length
-        ? results.map(res => `<div class="suggestion">${res}</div>`).join('')
-        : '<div>No suggestions found.</div>';
+        const results = trie.autocomplete(prefix);
+        resultsDiv.innerHTML = results.length
+            ? results.map(res => `<div class="suggestion">${res}</div>`).join('')
+            : '<div>No suggestions found.</div>';
 
-    // Add click event listeners to suggestion elements
-    const suggestions = resultsDiv.querySelectorAll('.suggestion');
-    suggestions.forEach(suggestion => {
-        suggestion.addEventListener('click', () => {
-            document.getElementById('prefixInput').value = suggestion.textContent; // Populate the input with the clicked suggestion
-            resultsDiv.innerHTML = ''; // Clear suggestions after selection
+        // Add click event listeners to suggestion elements
+        const suggestions = resultsDiv.querySelectorAll('.suggestion');
+        suggestions.forEach(suggestion => {
+            suggestion.addEventListener('click', () => {
+                document.getElementById('prefixInput').value = suggestion.textContent;
+                resultsDiv.innerHTML = ''; // Clear suggestions after selection
+            });
         });
-    });
+    }, 1000); 
 });
