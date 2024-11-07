@@ -72,58 +72,31 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
     }
 });
 
-// Prefix input with 1-second buffer for search
+// Event listener for input change with time buffer for search
 let timeoutId;
 document.getElementById('prefixInput').addEventListener('input', () => {
     clearTimeout(timeoutId); // Clear previous timeout to prevent multiple triggers
     timeoutId = setTimeout(() => {
         const prefix = document.getElementById('prefixInput').value;
         const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = ''; // Clear previous results
 
         if (prefix === '') {
-            return; // Do nothing if the input is empty
+            resultsDiv.innerHTML = ''; // Clear results if no input
+            return;
         }
 
         const results = trie.autocomplete(prefix);
-        if (results.length) {
-            results.forEach(result => {
-                const suggestionDiv = document.createElement('div');
-                suggestionDiv.classList.add('suggestion-item');
-                suggestionDiv.textContent = result;
+        resultsDiv.innerHTML = results.length
+            ? results.map(res => `<div class="suggestion">${res}</div>`).join('')
+            : '<div>No suggestions found.</div>';
 
-                // Add copy button (small, fixed size)
-                const copyButton = document.createElement('button');
-                copyButton.textContent = 'Copy';
-                copyButton.classList.add('copy-btn');
-                copyButton.style.marginLeft = '10px';
-                copyButton.style.fontSize = '12px';
-                copyButton.style.padding = '4px 8px';
-                copyButton.style.borderRadius = '5px';
-                copyButton.style.cursor = 'pointer';
-
-                suggestionDiv.appendChild(copyButton);
-
-                // Add event listener to copy the suggestion to clipboard
-                copyButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(result);
-                    copyButton.textContent = 'Copied!'; // Change button text after copying
-                    setTimeout(() => {
-                        copyButton.textContent = 'Copy'; // Revert button text after a short delay
-                    }, 2000);
-                });
-
-                // Add event listener for suggestion selection
-                suggestionDiv.addEventListener('click', () => {
-                    document.getElementById('prefixInput').value = result;
-                    resultsDiv.innerHTML = ''; // Clear suggestions after selection
-                });
-
-                resultsDiv.appendChild(suggestionDiv);
+        // Add click event listeners to suggestion elements
+        const suggestions = resultsDiv.querySelectorAll('.suggestion');
+        suggestions.forEach(suggestion => {
+            suggestion.addEventListener('click', () => {
+                document.getElementById('prefixInput').value = suggestion.textContent;
+                resultsDiv.innerHTML = ''; // Clear suggestions after selection
             });
-        } else {
-            resultsDiv.innerHTML = '<div>No suggestions found.</div>';
-        }
-    }, 1000); // Buffer time: 1 seconds
+        });
+    }, 1000); 
 });
