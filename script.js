@@ -77,26 +77,33 @@ let timeoutId;
 document.getElementById('prefixInput').addEventListener('input', () => {
     clearTimeout(timeoutId); // Clear previous timeout to prevent multiple triggers
     timeoutId = setTimeout(() => {
-        const prefix = document.getElementById('prefixInput').value;
+        const input = document.getElementById('prefixInput').value;
         const resultsDiv = document.getElementById('results');
 
-        if (prefix === '') {
-            resultsDiv.innerHTML = ''; // Clear results if no input
+        // Extract text after the last full stop
+        const sentences = input.split('.');
+        const lastSentence = sentences.pop().trim();
+
+        if (lastSentence === '') {
+            resultsDiv.innerHTML = '<h4>Suggestions</h4>'; // Clear results if no input but keep the heading
             return;
         }
 
-        const results = trie.autocomplete(prefix);
-        resultsDiv.innerHTML = results.length
-            ? results.map(res => `<div class="suggestion">${res}</div>`).join('')
-            : '<div>No suggestions found.</div>';
+        const results = trie.autocomplete(lastSentence);
+        resultsDiv.innerHTML = '<h4>Suggestions</h4>' + (results.length
+            ? results.map(res => `<div class="suggestion-item">${res}</div>`).join('')
+            : '<div>No suggestions found.</div>');
 
         // Add click event listeners to suggestion elements
-        const suggestions = resultsDiv.querySelectorAll('.suggestion');
+        const suggestions = resultsDiv.querySelectorAll('.suggestion-item');
         suggestions.forEach(suggestion => {
             suggestion.addEventListener('click', () => {
-                document.getElementById('prefixInput').value = suggestion.textContent;
-                resultsDiv.innerHTML = ''; // Clear suggestions after selection
+                // Replace the last part of the input with the selected suggestion
+                const newInput = sentences.join('.').trim() + '. ' + suggestion.textContent;
+                document.getElementById('prefixInput').value = newInput;
+                resultsDiv.innerHTML = '<h4>Suggestions</h4>'; // Clear suggestions after selection
             });
+            suggestion.style.cursor = 'pointer'; // Set cursor to pointer on hover
         });
-    }, 1000); 
+    }, 1000);
 });

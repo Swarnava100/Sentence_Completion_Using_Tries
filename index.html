@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autocomplete Trie</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,22 +12,23 @@
     <div class="bg-image"></div>
     <div class="overlay"></div>
 
+    <!-- Navbar with File Upload -->
+    <div class="navbar">
+        <div class="navbar-title">Autocomplete Trie</div>
+        <div class="file-upload-container">
+            <label for="fileInput"><i class="fas fa-file-upload"></i> Upload Text File</label>
+            <input type="file" id="fileInput" accept=".txt"/>
+        </div>
+    </div>
+
+    <!-- Main Autocomplete Container -->
     <div class="container mt-5">
         <div class="autocomplete-container shadow-lg">
             <!-- Left Column: Input Box -->
             <div class="input-box">
-                <h2 class="text-center mb-4">Autocomplete Sentences</h2>
-                
-                <!-- File input with icon -->
+                <h2 class="text-center mb-4">Enter Prefix</h2>
                 <div class="form-group">
-                    <label for="fileInput"><i class="fas fa-file-upload"></i> Upload Text File</label>
-                    <input type="file" id="fileInput" accept=".txt" class="form-control"/>
-                </div>
-
-                <!-- Prefix input with icon -->
-                <div class="form-group">
-                    <label for="prefixInput"><i class="fas fa-search"></i> Enter Prefix</label>
-                    <input type="text" id="prefixInput" class="form-control" placeholder="Enter a prefix" />
+                    <textarea id="prefixInput" class="form-control" placeholder=""></textarea>
                 </div>
             </div>
 
@@ -39,8 +39,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS (optional for certain features) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

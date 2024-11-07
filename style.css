@@ -1,5 +1,5 @@
 /* Reset and Base Styling */
-•⁠  ⁠{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,31 +35,57 @@ body, html {
     z-index: -1;
 }
 
-/* Centering the Autocomplete Container */
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #dedbdb5e;
+    color: #333333;
+}
+
+.navbar .navbar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar .file-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload-container label {
+    cursor: pointer;
+    color: #007bff;
+}
+
+#fileInput {
+    display: none; /* Hide actual input */
+}
+
+/* Main Container */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 10vh;
 }
 
 /* Autocomplete Box Styling */
 .autocomplete-container {
     display: flex;
+    width: 70%; /* Increase width */
+    height: 70vh; /* Consistent height */
     background-color: #ffffff;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s;
-    width: 80%; /* Adjust width to fit screen better */
-    max-width: 700px; /* Max width for large screens */
+    max-width: 900px;
 }
 
-.autocomplete-container:hover {
-    transform: scale(1.01);
-}
-
-/* Left Column Styling */
+/* Left Column Styling (Prefix Input) */
 .input-box {
     width: 50%;
     padding: 20px;
@@ -72,37 +98,19 @@ body, html {
     color: #333;
     font-weight: 600;
     margin-bottom: 20px;
-    text-align: center;
-}
-
-.form-group label {
-    font-size: 0.9rem;
-    color: #666;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.form-group label i {
-    margin-right: 8px;
-    color: #007bff;
-}
-
-#fileInput {
-    padding: 8px;
-    font-size: 0.9rem;
-    width: auto; /* Makes it shorter */
-    display: inline-block;
-    cursor: pointer;
 }
 
 #prefixInput {
     border-radius: 8px;
     border: 1px solid #ccc;
     padding: 10px;
-    width: 100%; /* Full width to match suggestions box */
+    height: 450px;
+    width: 100%;
+    text-align: start;
+    resize: none; /* Disable resizing for a consistent layout */
+    overflow-y: auto;
     transition: border-color 0.3s;
+    white-space: pre-wrap; /* Allows line breaks */
 }
 
 #prefixInput:focus {
@@ -117,7 +125,6 @@ body, html {
     padding: 20px;
     background-color: #ffffff;
     overflow-y: auto;
-    border-radius: 0 12px 12px 0;
 }
 
 .suggestions-box h4 {
@@ -142,21 +149,4 @@ body, html {
 .suggestion-item:hover {
     background-color: #f7f9fc;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Button Styling */
-button {
-    padding: 12px 24px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
 }
