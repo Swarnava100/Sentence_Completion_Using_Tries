@@ -55,20 +55,45 @@ function splitText(text) {
     return text.match(/[^.!?]*[.!?]/g) || [];
 }
 
-// Event listener for file input
+// Array to store the uploaded files
+let uploadedFiles = [];
+
+// Event listener for file input to handle multiple files
 document.getElementById('fileInput').addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const sentences = splitText(e.target.result); // Split text into sentences
-            sentences.forEach(sentence => {
-                if (sentence.trim()) {
-                    trie.insert(sentence.trim());
-                }
-            });
-        };
-        reader.readAsText(file);
+    const files = event.target.files; // Get all selected files
+    const fileDropdown = document.getElementById('fileDropdown');
+
+    if (files.length > 0) {
+        // Add files to the uploaded files array
+        uploadedFiles.push(...Array.from(files));
+
+        // Reset dropdown and add default option
+        fileDropdown.innerHTML = '<option>Select a file</option>'; 
+
+        // Enable the dropdown
+        fileDropdown.disabled = false;
+
+        // Populate the dropdown with the names of all uploaded files
+        uploadedFiles.forEach((file, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = file.name;
+            fileDropdown.appendChild(option);
+        });
+
+        // Read and insert sentences from each uploaded file
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const sentences = splitText(e.target.result); // Split text into sentences
+                sentences.forEach(sentence => {
+                    if (sentence.trim()) {
+                        trie.insert(sentence.trim()); // Insert sentences into trie
+                    }
+                });
+            };
+            reader.readAsText(file); // Read file as text
+        });
     }
 });
 

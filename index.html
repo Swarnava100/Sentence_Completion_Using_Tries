@@ -16,8 +16,14 @@
     <div class="navbar">
         <div class="navbar-title">Autocomplete Trie</div>
         <div class="file-upload-container">
-            <label for="fileInput"><i class="fas fa-file-upload"></i> Upload Text File</label>
-            <input type="file" id="fileInput" accept=".txt"/>
+            <label for="fileInput"><i class="fas fa-file-upload"></i> Uploaded Text Files</label>
+            <input type="file" id="fileInput" accept=".txt" multiple/>
+        </div>
+        <!-- Dropdown for file selection -->
+        <div class="file-dropdown-container">
+            <select id="fileDropdown" class="form-control" disabled>
+                <option>Uploaded files </option>
+            </select>
         </div>
     </div>
 
