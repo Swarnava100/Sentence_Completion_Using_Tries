@@ -9,6 +9,7 @@ body, html {
     height: 100%;
     font-family: 'Roboto', sans-serif;
     background-color: #f4f6f9;
+    overflow-x: hidden;
 }
 
 /* Background Image and Overlay */
@@ -18,10 +19,10 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('background1.png'); /* Background image */
+    background-image: url('background1.jpg'); /* Background image */
     background-size: cover;
     background-position: center;
-    z-index: -1;
+    z-index: -1; /* This ensures the background stays behind content */
     filter: blur(8px);
 }
 
@@ -41,8 +42,10 @@ body, html {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background-color: #dedbdb5e;
-    color: #333333;
+    background-color: rgba(12, 123, 147, 0.85); /* Dark cyan background for navbar */
+    color: white;
+    position: relative;
+    z-index: 10; /* Ensure navbar stays on top */
 }
 
 .navbar .navbar-title {
@@ -58,19 +61,21 @@ body, html {
 
 .file-upload-container label {
     cursor: pointer;
-    color: #007bff;
+    color: #fff;
 }
 
 #fileInput {
     display: none; /* Hide actual input */
 }
 
-/* Main Container */
+/* Main Container for Autocomplete Box */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 10vh;
+    min-height: 80vh;
+    z-index: 5;
+    position: relative;
 }
 
 /* Autocomplete Box Styling */
@@ -78,11 +83,12 @@ body, html {
     display: flex;
     width: 70%;
     height: 70vh;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     max-width: 900px;
+    z-index: 5; /* Ensure it stays above the background */
 }
 
 /* Left Column Styling (Prefix Input) */
@@ -102,7 +108,7 @@ body, html {
 
 #prefixInput {
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ff6347; /* Updated border color */
     padding: 10px;
     height: 450px;
     width: 100%;
@@ -111,19 +117,20 @@ body, html {
     overflow-y: auto;
     transition: border-color 0.3s;
     white-space: pre-wrap;
+    background-color: #ffffff; /* White background for input */
 }
 
 #prefixInput:focus {
-    border-color: #007bff;
+    border-color: #ff4500; /* Highlight focus color */
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 0 5px rgba(255, 69, 0, 0.2); /* Focus shadow effect */
 }
 
 /* Right Column (Suggestions Box) Styling */
 .suggestions-box {
     width: 50%;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: #f5f5f7; /* Light grey background */
     overflow-y: auto;
 }
 
@@ -147,19 +154,22 @@ body, html {
 }
 
 .suggestion-item:hover {
-    background-color: #f7f9fc;
+    background-color: #ff6347; /* Hover color updated */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: #ffffff; /* Text color on hover */
 }
 
 /* Highlighting Styling */
 .highlighted {
-    background-color: yellow;
+    background-color: #ff6347;
     font-weight: bold;
+    color: #ffffff; /* Highlighted text color */
 }
 
 .highlight {
-    background-color: yellow;
+    background-color: #ff6347;
     font-weight: bold;
+    color: #ffffff; /* Highlighted text color */
 }
 
 /* Pagination button styles */
@@ -168,17 +178,12 @@ body, html {
     padding: 8px 12px;
     font-size: 1rem;
     color: white;
-    background-color: #007bff;
+    background-color: #ff6347; /* Button background updated */
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .next-button:hover, .prev-button:hover {
-    background-color: #0056b3;
+    background-color: #ff4500; /* Hover effect on button */
 }
-
-.highlight {
-    background-color: yellow;
-}
-

@@ -11,6 +11,8 @@
     <!-- Background Image Container -->
     <div class="bg-image"></div>
     <div class="overlay"></div>
+    
+    
 
     <!-- Navbar with File Upload -->
     <div class="navbar">
@@ -21,9 +23,11 @@
         </div>
         <!-- Dropdown for file selection -->
         <div class="file-dropdown-container">
-            <select id="fileDropdown" class="form-control" disabled>
-                <option>Uploaded files </option>
+            <select id="fileDropdown">
+                <option disabled selected>Uploaded files</option>
             </select>
+            
+            <input type="file" id="fileInput" multiple />
         </div>
     </div>
 
