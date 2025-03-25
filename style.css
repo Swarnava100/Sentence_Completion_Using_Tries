@@ -22,8 +22,8 @@ body, html {
     background-image: url('background1.jpg'); /* Background image */
     background-size: cover;
     background-position: center;
-    z-index: -1; /* This ensures the background stays behind content */
-    filter: blur(8px);
+    z-index: -1; /* Keeps background behind content */
+    filter: blur(6px); /* Reduced blur for a clearer effect */
 }
 
 .overlay {
@@ -32,7 +32,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.3); /* Slightly reduced opacity */
     z-index: -1;
 }
 
@@ -41,31 +41,34 @@ body, html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    background-color: rgba(12, 123, 147, 0.85); /* Dark cyan background for navbar */
+    padding: 15px 20px;
+    background-color: rgba(12, 123, 147, 0.9); /* Slightly deeper color for contrast */
     color: white;
     position: relative;
-    z-index: 10; /* Ensure navbar stays on top */
+    z-index: 10;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar .navbar-title {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .navbar .file-upload-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .file-upload-container label {
     cursor: pointer;
     color: #fff;
+    font-weight: 500;
 }
 
 #fileInput {
-    display: none; /* Hide actual input */
+    display: none;
 }
 
 /* Main Container for Autocomplete Box */
@@ -81,109 +84,112 @@ body, html {
 /* Autocomplete Box Styling */
 .autocomplete-container {
     display: flex;
-    width: 70%;
+    width: 75%;
     height: 70vh;
-    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
-    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly more opacity */
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    max-width: 900px;
-    z-index: 5; /* Ensure it stays above the background */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    max-width: 950px;
+    z-index: 5;
 }
 
 /* Left Column Styling (Prefix Input) */
 .input-box {
     width: 50%;
-    padding: 20px;
+    padding: 24px;
     background-color: #f5f5f7;
-    border-right: 1px solid #e0e0e0;
+    border-right: 2px solid #e0e0e0;
 }
 
 .input-box h2 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: #333;
     font-weight: 600;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 #prefixInput {
-    border-radius: 8px;
-    border: 1px solid #ff6347; /* Updated border color */
-    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ff6347;
+    padding: 12px;
     height: 450px;
     width: 100%;
-    text-align: start;
+    font-size: 1.1rem;
     resize: none;
     overflow-y: auto;
     transition: border-color 0.3s;
     white-space: pre-wrap;
-    background-color: #ffffff; /* White background for input */
+    background-color: #ffffff;
+    box-shadow: inset 0px 3px 6px rgba(0, 0, 0, 0.05);
 }
 
 #prefixInput:focus {
-    border-color: #ff4500; /* Highlight focus color */
+    border-color: #ff4500;
     outline: none;
-    box-shadow: 0 0 5px rgba(255, 69, 0, 0.2); /* Focus shadow effect */
+    box-shadow: 0 0 8px rgba(255, 69, 0, 0.3);
 }
 
-/* Right Column (Suggestions Box) Styling */
+/* Right Column (Suggestions Box) */
 .suggestions-box {
     width: 50%;
-    padding: 20px;
-    background-color: #f5f5f7; /* Light grey background */
+    padding: 24px;
+    background-color: #f5f5f7;
     overflow-y: auto;
 }
 
 .suggestions-box h4 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #333;
     font-weight: 600;
     margin-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
 }
 
+/* Suggestions List */
 .suggestion-item {
-    padding: 12px;
-    font-size: 1rem;
+    padding: 14px;
+    font-size: 1.1rem;
     color: #444;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #dcdcdc;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    border-radius: 8px;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.1s ease-in-out;
 }
 
 .suggestion-item:hover {
-    background-color: #ff6347; /* Hover color updated */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    color: #ffffff; /* Text color on hover */
+    background-color: #ff6347;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    transform: scale(1.02);
 }
 
-/* Highlighting Styling */
-.highlighted {
+/* Highlighting */
+.highlighted, .highlight {
     background-color: #ff6347;
     font-weight: bold;
-    color: #ffffff; /* Highlighted text color */
+    color: #ffffff;
+    padding: 2px 5px;
+    border-radius: 4px;
 }
 
-.highlight {
-    background-color: #ff6347;
-    font-weight: bold;
-    color: #ffffff; /* Highlighted text color */
-}
-
-/* Pagination button styles */
+/* Pagination Button Styles */
 .next-button, .prev-button {
-    margin-top: 10px;
-    padding: 8px 12px;
+    margin-top: 12px;
+    padding: 10px 16px;
     font-size: 1rem;
+    font-weight: 600;
     color: white;
-    background-color: #ff6347; /* Button background updated */
+    background-color: #ff6347;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s ease-in-out;
 }
 
 .next-button:hover, .prev-button:hover {
-    background-color: #ff4500; /* Hover effect on button */
+    background-color: #ff4500;
+    transform: scale(1.05);
 }
